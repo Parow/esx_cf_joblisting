@@ -18,13 +18,13 @@ Citizen.CreateThread(function()
     
     if Config.EnableBlips then
         blip = AddBlipForCoord(-265.0, -963.6, 30.2)
-        SetBlipSprite(blip, 408)
+        SetBlipSprite(blip, 407)
         SetBlipDisplay(blip, 4)
         SetBlipScale(blip, 0.9)
         SetBlipColour(blip, 5)
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString(blip, "Pôle Emploi")
+        AddTextComponentString("Pôle Emploi")
         EndTextCommandSetBlipName(blip)
     end
 
