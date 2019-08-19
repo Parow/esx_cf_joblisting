@@ -13,7 +13,7 @@ Citizen.CreateThread(function()
         Jobs = data
     end)
 
-    Wait(1000)
+    Wait(500)
     AddMenuJobMenu(mainMenu)
     
     if Config.EnableBlips then
