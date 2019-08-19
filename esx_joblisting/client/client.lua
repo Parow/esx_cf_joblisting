@@ -1,62 +1,49 @@
 ESX = nil
 Jobs = {}
+onmenu = false
+
 Citizen.CreateThread(function()
+
     while ESX == nil do
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
         Citizen.Wait(0)
     end
+
     ESX.TriggerServerCallback('esx_joblisting:getJobsList', function(data)
         Jobs = data
     end)
 
     Wait(500)
     AddMenuJobMenu(mainMenu)
-end)
-
--- blips
-
-local blips = {
-    {title="Pôle emplois", colour=5, id=408, x = -265.0, y = -963.6, z = 30.2}
-}
-
-Citizen.CreateThread(function()
-
+    
     if Config.EnableBlips then
-        for _, info in pairs(blips) do
-            info.blip = AddBlipForCoord(info.x, info.y, info.z)
-            SetBlipSprite(info.blip, info.id)
-            SetBlipDisplay(info.blip, 4)
-            SetBlipScale(info.blip, 0.9)
-            SetBlipColour(info.blip, info.colour)
-            SetBlipAsShortRange(info.blip, true)
-            BeginTextCommandSetBlipName("STRING")
-            AddTextComponentString(info.title)
-            EndTextCommandSetBlipName(info.blip)
-        end
+        blip = AddBlipForCoord(-265.0, -963.6, 30.2)
+        SetBlipSprite(blip, 407)
+        SetBlipDisplay(blip, 4)
+        SetBlipScale(blip, 0.9)
+        SetBlipColour(blip, 5)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString("Pôle Emploi")
+        EndTextCommandSetBlipName(blip)
     end
-end)
 
--- marker et help text
-
-local joblisting = {
-	{x = -265.0, y = -963.6, z = 30.2},
-}
-
-Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         _menuPool:ProcessMenus()
 
-        for k in pairs(joblisting) do
-
             local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
-            local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, joblisting[k].x, joblisting[k].y, joblisting[k].z)
+            local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, -265.0, -963.6, 30.2)
 
-            if dist <= 1.2 then
-                ESX.ShowHelpNotification("Appuyez sur ~INPUT_TALK~ pour accéder au ~b~pôle emplois~s~")
-				if IsControlJustPressed(1,51) then 
-					mainMenu:Visible(not mainMenu:Visible())
-				end
+            if onmenu == false then
+                DrawMarker(2, -265.0, -963.6, 31.2, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.8, 0.6, 0.6, 255, 255, 255, 50, true, true, 2, nil, nil, false)
+            end
+            
+            if dist <= 1.2 and onmenu == false then
+                ESX.ShowHelpNotification("Appuyez sur ~INPUT_TALK~ pour accéder au ~b~pôle emploi~s~")
+            if IsControlJustPressed(1,51) then
+                onmenu = true
+                mainMenu:Visible(not mainMenu:Visible())
             end
         end
     end
